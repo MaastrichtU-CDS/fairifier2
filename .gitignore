@@ -4,6 +4,9 @@
 # Local conf
 .env
 
+# Data
+input/
+
 # Python
 venv
 .venv
