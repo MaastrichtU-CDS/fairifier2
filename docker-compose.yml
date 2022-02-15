@@ -61,13 +61,13 @@ x-airflow-common:
     AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
     AIRFLOW_VAR_USER_DATA_DIR: /usr/local/airflow/user/data
-    AIRFLOW_VAR_LC_UPLOAD_CONFIG: /usr/local/airflow/upload_config.yaml
+    #AIRFLOW_VAR_LC_UPLOAD_CONFIG: /usr/local/airflow/upload_config.yaml
     AIRFLOW_VAR_R2RML_CLI_DIR: /usr/local/airflow/r2rml
   volumes:
     - ./airflow/dags:/opt/airflow/dags
     - ./airflow/ontop-cli-4.1.0:/usr/local/airflow/r2rml
     - ./input:/usr/local/airflow/user/data/input
-    - ./upload_config.yaml:/usr/local/airflow/upload_config.yaml
+    #- ./upload_config.yaml:/usr/local/airflow/upload_config.yaml
     - airflow-logs-volume:/opt/airflow/logs
     # - ./plugins:/opt/airflow/plugins
   user: "${AIRFLOW_UID:-50000}:0"
