@@ -184,6 +184,19 @@ services:
       airflow-init:
         condition: service_completed_successfully
 
+  dashapp:
+    image: aiaragomes/fairifier-dashapp:1.0.0
+    ports:
+      - 5050:5050
+    links:
+      - graphdb:graphdb
+    environment:
+      - TRIPLE_STORE_ADDR=http://graphdb:7200
+    depends_on:
+      <<: *airflow-common-depends-on
+      airflow-init:
+        condition: service_completed_successfully
+
   airflow-init:
     <<: *airflow-common
     entrypoint: /bin/bash
