@@ -39,6 +39,7 @@
 # Feel free to modify this file to suit your needs.
 ---
 version: '3'
+
 x-airflow-common:
   &airflow-common
   # In order to add custom dependencies or upgrade provider packages you can use your extended image.
@@ -61,15 +62,12 @@ x-airflow-common:
     AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
     AIRFLOW_VAR_USER_DATA_DIR: /usr/local/airflow/user/data
-    #AIRFLOW_VAR_LC_UPLOAD_CONFIG: /usr/local/airflow/upload_config.yaml
     AIRFLOW_VAR_R2RML_CLI_DIR: /usr/local/airflow/r2rml
   volumes:
     - ./airflow/dags:/opt/airflow/dags
     - ./airflow/ontop-cli-4.1.0:/usr/local/airflow/r2rml
-    - ./input:/usr/local/airflow/user/data/input
-    #- ./upload_config.yaml:/usr/local/airflow/upload_config.yaml
+    - shared-data:/usr/local/airflow/user/data/input
     - airflow-logs-volume:/opt/airflow/logs
-    # - ./plugins:/opt/airflow/plugins
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -185,11 +183,13 @@ services:
         condition: service_completed_successfully
 
   dashapp:
-    image: aiaragomes/fairifier-dashapp:1.0.0
+    image: aiaragomes/fairifier-app:1.0.0
     ports:
       - 5050:5050
     links:
       - graphdb:graphdb
+    volumes:
+      - shared-data:/input
     environment:
       - TRIPLE_STORE_ADDR=http://graphdb:7200
     depends_on:
@@ -306,3 +306,4 @@ services:
 volumes:
   postgres-db-volume:
   airflow-logs-volume:
+  shared-data:
