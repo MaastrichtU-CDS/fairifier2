@@ -79,6 +79,8 @@ x-airflow-common:
 services:
   postgres:
     image: postgres:13
+    ports:
+      - 5432:5432
     environment:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
@@ -183,7 +185,7 @@ services:
         condition: service_completed_successfully
 
   dashapp:
-    image: aiaragomes/fairifier-app:1.0.0
+    image: aiaragomes/fairifier-app:1.0.2
     ports:
       - 5050:5050
     links:
