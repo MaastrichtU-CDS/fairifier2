@@ -1,5 +1,6 @@
 import zipfile
 import shutil
+import logging
 
 import pandas as pd
 from sqlalchemy.engine import create_engine
@@ -14,6 +15,7 @@ def extract_zip_and_upload_rdb(input_dir, success_dir, conn_str, append=True, **
         error_dir (Path): Directory where failed parsed zips should go
 
     """
+    LOGGER = logging.getLogger("airflow.task")
     file = list(input_dir.glob('*.zip'))[0]
 
     success_dir.mkdir(parents=True, exist_ok=True)
@@ -27,7 +29,7 @@ def extract_zip_and_upload_rdb(input_dir, success_dir, conn_str, append=True, **
     for name in csv_names:
         if '/' not in name and name.endswith('.csv'):
             df = pd.read_csv(archive.open(name))
-
             df.to_sql(name.split('.')[0], eng, if_exists='append' if append else 'replace')
+            LOGGER.info(f'uploading table {str(name)} to postgres')
 
     shutil.move(str(file.resolve()), str((success_dir / (file.name + '.' + kwargs['ts_nodash'])).resolve()))
