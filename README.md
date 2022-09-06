@@ -3,8 +3,8 @@
 The goal of the FAIRifier is to FAIRify tabular data. 
 This tooling focuses on the I and R of FAIR, and achieves this by turning tabular data into RDF data.
 
-The tool is based on a few pipelines defined in python files (under `airflow/dags`), which are responsible for different parts of the transformation.
-These pipelines include one to upload data to a LibreClinica instance.
+The tool is based on a few pipelines defined in python files (under `airflow/dags`), 
+which are responsible for different parts of the transformation.
 
 ## Configuration
 
@@ -12,17 +12,25 @@ Configuration is mostly done through environment variables, which are loaded int
 `.env.example` has a list of all the necessary configuration options. 
 Note that all of these can also be defined in Airflow itself, under `Variables`.
 
+## Services
+
+* Postgres: port 5432
+* Airflow: port 8080
+* GraphDB: port 7200
+* Dash UI: port 5050
+
 ## DAGs
 
 The code for all the DAGs is available under `airflow/dags`.
 
 ### `upload_csv_dag`
 
-You can upload CSV's to a postgres database by placing a `.zip` file in the `input` directory.
-This file will automatically be uploaded to the defined postgres database.
+You can upload CSV's or excel files to a postgres database using the user interface.
+These files will automatically be uploaded to the defined postgres database.
 
-The CSV's will be uploaded to tables in the database equal to their name (minues the `.csv` extension). 
-The database used is defined by the Airflow Variable `R2RML_DB_URL`, by default this is set to a database `data` in the built-in postgres container.
+The tabular data will be uploaded to tables in the database equal to their name (minus the extension). 
+The database used is defined by the Airflow Variable `R2RML_DB_URL`, by default this is set to a 
+database `data` in the built-in postgres container.
 
 If data has been inserted in a table before, a new upload can either replace said data or append to it.
 This is handled by the `APPEND_CSV` Airflow Variable.
