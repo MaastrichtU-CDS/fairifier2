@@ -6,6 +6,8 @@
 
 # Data
 input/
+data/
+docs/
 
 # Python
 venv
