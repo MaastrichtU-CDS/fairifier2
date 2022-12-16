@@ -185,7 +185,7 @@ services:
         condition: service_completed_successfully
 
   dashapp:
-    image: aiaragomes/fairifier-app:latest
+    image: ghcr.io/maastrichtu-cds/fairifier2-app:latest
     ports:
       - 5050:5050
     links:
