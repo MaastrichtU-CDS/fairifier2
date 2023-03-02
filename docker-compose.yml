@@ -179,6 +179,10 @@ services:
         - GDB_HEAP_SIZE=2g
         - GDB_MIN_MEM=1g
         - GDB_MAX_MEM=2g
+    ulimits:
+      nofile:
+        soft: 2048
+        hard: 2048
     depends_on:
       <<: *airflow-common-depends-on
       airflow-init:
