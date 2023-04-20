@@ -34,6 +34,7 @@ def upload_triples_dir(input_path, sparql_endpoint, empty_db=True, **kwargs):
         sparql.query()
 
     for file in input_path.glob('*.nt'):
+        LOGGER.info(f'uploading file {str(file)}')
         upload_triples_file(file, sparql_endpoint, empty_db=False)
 
 def upload_terminology(url, sparql_endpoint, format='xml', **kwargs):
