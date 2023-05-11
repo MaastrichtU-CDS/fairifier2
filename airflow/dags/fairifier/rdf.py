@@ -136,14 +136,17 @@ class OntOperator(BashOperator):
         bash_command= bash_command + "mkdir -p ${workdir}/output \n" +\
         "if ls ${workdir}/output/*.nt >/dev/null 2>&1; " +\
         "then rm ${workdir}/output/*.nt; " +\
-        "fi \n" +\
-        "for file in `basename ${workdir}/ttl/*.ttl`; " +\
-        "do \n" +\
+        "fi \n" + \
+        "FILES=(${workdir}/ttl/*.ttl) \n" +\
+        "for file in ${FILES[@]}; " +\
+        "do \n" + \
+        "echo $file \n" + \
+        "output=`basename $file` \n" +\
         "${R2RML_CLI_DIR}/ontop materialize " +\
-        "-m ${workdir}/ttl/$file " +\
+        "-m $file " +\
         "-f ntriples " +\
         "-p ${workdir}/r2rml.properties " +\
-        "-o ${workdir}/output/$file \n" +\
+        "-o ${workdir}/output/$output \n" +\
         "done"
         
         env.setdefault('workdir', workdir)
