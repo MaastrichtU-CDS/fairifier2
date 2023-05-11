@@ -29,7 +29,25 @@ map:basicQuery a rr:LogicalTable;
 	rr:sqlQuery """SELECT id as id, t as t, n as n, m as m, stage as stage,
     date_of_diagnosis as date_of_diagnosis, date_of_fu as date_of_fu,
     vital_status as vital_status FROM data""";
+	rdfs:label """Every row should correspond to a unique patient.<br/>
+	The target variables have the following name and specific meaning:
+	id, t, n, m, stage, date_of_diagnosis, date_of_fu, vital_status.<br/>
+	<ul>
+	<li>id: local anonymized ID</li>
+	<li>t: T stage [Tx, Tis, T0, T1, T1mi, T1a, T1b, T1c, T2, T2a, T2b, T3,
+	T4]</li>
+	<li>n: N stage [Nx, N0, N1, N2, N3]</li>
+	<li>m: M stage [Mx, M0, M1, M1a, M1b, M1c]</li>
+	<li>stage: overall stage [0, Occult, I, IA, IA1, IA2, IA3, IB, II, IIA,
+	IIB, III, IIIA, IIIB, IIIC, IV, IVA, IVB]</li>
+	<li>date_of_diagnosis: date of diagnosis [e.g."2012-01-25"]</li>
+	<li>date_of_fu: date of follow-up or death [e.g."2016-01-25"], this is
+	the date of last follow-up of an alive patient or the date of death of a
+	deceased person</li>
+	<li>vital_status: vital status at follow-up [dead, alive]</li>
+	</ul>""";
 	skos:definition "id,t,n,m,stage,date_of_diagnosis,date_of_fu,vital_status".
+
 
 ############################################
 # patient
@@ -58,17 +76,7 @@ map:patient a rr:TriplesMap;
 	            rr:parent "id";
 	        ];
 	    ];
-	];
-    rr:predicateObjectMap [
-        rr:predicate roo:P100028;		# has_vital_status
-        rr:objectMap [
-            rr:parentTriplesMap map:vitalStatus;
-            rr:joinCondition [
-                rr:child "id";
-                rr:parent "id";
-            ];
-        ];
-    ].
+	].
 
 
 ############################################
@@ -235,51 +243,3 @@ map:diagnosisDate a rr:TriplesMap;
 	].
 
 
-############################################
-# vital status
-############################################
-
-# define vitalStatus classmap
-map:vitalStatus a rr:TriplesMap;
-    rr:logicalTable map:basicQuery;
-    rr:subjectMap [
-        rr:template "patient/{id}/vital_status";
-        rr:class ncit:C25717;			# Vital Status
-    ];
-    rr:predicateObjectMap [
-        rr:predicate roo:local_value;
-        rr:objectMap [
-            rr:column "vital_status";
-            rr:datatype xsd:string;
-        ];
-    ];
-    rr:predicateObjectMap [
-        rr:predicate roo:P100228;		# has_date
-        rr:objectMap [
-            rr:parentTriplesMap map:vitalStatusDate;
-            rr:joinCondition [
-                rr:child "id";
-                rr:parent "id";
-            ];
-        ];
-    ].
-
-
-############################################
-# date of vital status
-############################################
-
-# define vitalStatusDate classmap
-map:vitalStatusDate a rr:TriplesMap;
-    rr:logicalTable map:basicQuery;
-    rr:subjectMap [
-        rr:template "patient/{id}/vital_status/date_of_fu";
-        rr:class ncit:C25164;			# Date
-    ];
-    rr:predicateObjectMap [
-        rr:predicate roo:local_value;
-        rr:objectMap [
-            rr:column "date_of_fu";
-            rr:datatype xsd:date;       # TODO: or leave as string?
-        ];
-    ].
