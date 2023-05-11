@@ -134,17 +134,17 @@ class OntOperator(BashOperator):
             f'echo "jdbc.password={rdb_pass}"' + ' >> ${workdir}/r2rml.properties\n'
 
         bash_command= bash_command + "mkdir -p ${workdir}/output \n" +\
-            "if ls ${workdir}/output/*.nt >/dev/null 2>&1; " +\
-            "then rm ${workdir}/output/*.nt; " +\
-            "fi \n" +\
-            "for file in `basename ${workdir}/ttl/*.ttl`; " +\
-            "do \n" +\
-            "${R2RML_CLI_DIR}/ontop materialize " +\
-            "-m ${workdir}/ttl/$file " +\
-            "-f ntriples " +\
-            "-p ${workdir}/r2rml.properties " +\
-            "-o ${workdir}/output/$file \n" +\
-            "done"
+        "if ls ${workdir}/output/*.nt >/dev/null 2>&1; " +\
+        "then rm ${workdir}/output/*.nt; " +\
+        "fi \n" +\
+        "for file in `basename ${workdir}/ttl/*.ttl`; " +\
+        "do \n" +\
+        "${R2RML_CLI_DIR}/ontop materialize " +\
+        "-m ${workdir}/ttl/$file " +\
+        "-f ntriples " +\
+        "-p ${workdir}/r2rml.properties " +\
+        "-o ${workdir}/output/$file \n" +\
+        "done"
         
         env.setdefault('workdir', workdir)
         env.setdefault('R2RML_CLI_DIR', r2rml_cli_dir)
